@@ -26,7 +26,7 @@ fromTheTop <- function (mySettings=list()) {
       "Details of the impact",
       "Sources to corroborate the impact|Sources to corroborate impact|References to corroborate the impact" 
     ),
-    impactSettings = list(cname="C:/Martin/Data/Impact/REF2014-Results-xlsx.csv", uoa=19, profile="Impact"),
+    impactSettings = list(uoa=19, profile="Impact"),
     helperFiles = list(buzzFile1="C:/Martin/Data/Impact/buzz.txt", buzzFile2="C:/Martin/Data/Impact/busibuzz.txt"),
     topicCount = 10,
     topicIter = 10,
@@ -203,17 +203,16 @@ sectionise <- function (docs, sectionHeadings=c("")) {
 
 #' Read in impact scores from file
 #'
-#' This function reads the ref2014 csv file and extracts scores given a uoa and profile type
+#' This function extracts scores from the ref2014 data set given a uoa and profile type
 #' @export
-#' @param settings, list containing cname: path to csv file, uoa : the unit of assessment, profile: the profile type to score
+#' @param settings, list containing uoa : the unit of assessment, profile: the profile type to score
 #' @return a data.table of scores per university
 #' @examples
-#' impactScoreReader (cname="C:/Martin/Data/Impact/REF submission documents/Templates", uoa=19, profile="Impact")
+#' impactScoreReader (uoa=19, profile="Impact")
 impactScoreReader <- function (settings) {
   library (data.table)
   
-  csv <- read.csv (settings$cname)
-  csv2 <- subset(csv, Profile==settings$profile)
+  csv2 <- subset(ref2014, Profile==settings$profile)
   csv3 <- subset(csv2, Unit.of.assessment.number==settings$uoa)
   
   gpacalc <- function (x) { ((as.numeric(x['X4.']) * 4) + (as.numeric(x['X3.']) * 3)  
@@ -1048,4 +1047,15 @@ calcCorrelation <- function (docs, docField, scores, method="pearson") {
   vals
 }
 
-
+#' Prices of 50,000 round cut diamonds.
+#'
+#' A dataset containing the prices and other attributes of almost 54,000
+#' diamonds.
+#'
+#' @format A data frame with 53940 rows and 18 variables:
+#' \describe{
+#'   \item{Institution.code..UKPRN.}{uni code}
+#'   \item{Institution.name}{university name}
+#' }
+#' @source ref2014 website
+"ref2014"

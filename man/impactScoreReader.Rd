@@ -7,15 +7,15 @@
 impactScoreReader(settings)
 }
 \arguments{
-\item{settings,}{list containing cname: path to csv file, uoa : the unit of assessment, profile: the profile type to score}
+\item{settings,}{list containing uoa : the unit of assessment, profile: the profile type to score}
 }
 \value{
 a data.table of scores per university
 }
 \description{
-This function reads the ref2014 csv file and extracts scores given a uoa and profile type
+This function extracts scores from the ref2014 data set given a uoa and profile type
 }
 \examples{
-impactScoreReader (cname="C:/Martin/Data/Impact/REF submission documents/Templates", uoa=19, profile="Impact")
+impactScoreReader (uoa=19, profile="Impact")
 }
 
