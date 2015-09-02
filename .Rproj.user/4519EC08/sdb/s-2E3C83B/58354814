@@ -1,0 +1,16 @@
+{
+    "contents" : "\n##################\n# TF-IDF SCORING #\n##################\n\nload('data.RData')\n\n\n########### Which words are important? #######################\n\n\n# Convert to term-document matrix\n\nreview_source <- VectorSource(data$text)\ncorpus <- Corpus(review_source)\n\ncorpus <- tm_map(corpus, content_transformer(tolower))\ncorpus <- tm_map(corpus, removePunctuation)\ncorpus <- tm_map(corpus, removeWords, stopwords(\"english\"))\ncorpus <- tm_map(corpus, stripWhitespace)\n\ntdm_full <- TermDocumentMatrix(corpus, control = list(weighting = weightTfIdf))\ntdm <- removeSparseTerms(tdm_full, 0.9)\ntdm <- as.matrix(tdm)\n\nvocab <- rownames(tdm)\nsaveRDS(vocab, file = 'vocab.RData')\n\n# Overall rating\n\nget_important_words <- function(metric, csv = NULL, plot = FALSE){\n  \n  #Get word ratings\n  word_rating <- (tdm %*% metric) / rowSums(tdm)\n  n           <- length(word_rating[order(word_rating, decreasing = TRUE), ])\n  \n  #Find the top and the bottom\n  top         <- word_rating[order(word_rating, decreasing = TRUE), ][1:20]\n  bottom      <- word_rating[order(word_rating, decreasing = TRUE), ][(n-19):n]\n  \n  #combine top and bottom\n  top    <- cbind('top', 1:20, top)\n  bottom <- cbind('bottom', (n-19):n, bottom)\n  out <- rbind(top, bottom)\n  \n  #Change to a dataframe\n  out <- as.data.frame(out, stringsAsFactors = FALSE)\n  out$word <- rownames(out)\n  \n  #Add row names\n  names(out) <- c('position', 'rank', 'score', 'word')\n  \n  #Make numbers numeric\n  out$rank <- as.numeric(out$rank)    \n  out$score <- as.numeric(out$score)\n  \n  #Top is ordered before bottom\n  out$position <- ordered(out$position, c('top', 'bottom'))\n  \n  if (!is.null(csv)){\n    write.csv(out, file = csv)\n  }\n  \n  if (plot){\n    return(ggplot(out) +\n             aes(y = rank, x = score) +\n             scale_x_log10() +\n             scale_y_reverse() +\n             geom_text(aes(label = word)) +\n             facet_grid(position~.,\n                        scales = 'free'))\n  }\n  \n  return(out)\n}\n\nget_important_words(data$average_rating, plot = TRUE)\nget_important_words(1000-data$players_rank, plot = TRUE)\nget_important_words(1000-data$play_time_rank, plot = TRUE)\n",
+    "created" : 1433154134496.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2265665476",
+    "id" : "58354814",
+    "lastKnownWriteTime" : 1433154117,
+    "path" : "C:/Users/cs22/workspace/refimpact/R/tf-idf_scoring.R",
+    "project_path" : "R/tf-idf_scoring.R",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_source"
+}
