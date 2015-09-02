@@ -8,6 +8,22 @@
 \describe{
   \item{Institution.code..UKPRN.}{uni code}
   \item{Institution.name}{university name}
+  \item{Institution.sort.order}{numerical sort order}
+  \item{Main.panel}{assessment panel identifier}
+  \item{Unit.of.assessment.number}{UOA code}
+  \item{Unit.of.assessment.name}{UOA name}
+  \item{Multiple.submission.letter}{identifier for multiple entries from one institution}
+  \item{Multiple.submission.name}{department within university}
+  \item{Joint.submission}{submission between universities}
+  \item{Profile}{Aspect of REF}
+  \item{FTE.Category.A.staff.submitted}{number of staff}
+  \item{X4.}{4 star rating}
+  \item{X3.}{3 star rating}
+  \item{X2.}{2 star rating}
+  \item{X1.}{1 star rating}
+  \item{unclassified}{numerical sort order}
+  \item{Area}{geographic area code within UK}
+  \item{Post92}{new university flag}
 }}
 \source{
 ref2014 website
