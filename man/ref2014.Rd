@@ -3,8 +3,8 @@
 \docType{data}
 \name{ref2014}
 \alias{ref2014}
-\title{Prices of 50,000 round cut diamonds.}
-\format{A data frame with 53940 rows and 18 variables:
+\title{REF 2014 data}
+\format{A data frame with 7644 rows and 18 variables:
 \describe{
   \item{Institution.code..UKPRN.}{uni code}
   \item{Institution.name}{university name}
@@ -32,8 +32,8 @@ ref2014 website
 ref2014
 }
 \description{
-A dataset containing the prices and other attributes of almost 54,000
-diamonds.
+A dataset containing REF ratings for all UK institutions
+across multiple aspects and units of assessment
 }
 \keyword{datasets}
 

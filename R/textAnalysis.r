@@ -1047,12 +1047,12 @@ calcCorrelation <- function (docs, docField, scores, method="pearson") {
   vals
 }
 
-#' Prices of 50,000 round cut diamonds.
+#' REF 2014 data
 #'
-#' A dataset containing the prices and other attributes of almost 54,000
-#' diamonds.
+#' A dataset containing REF ratings for all UK institutions
+#' across multiple aspects and units of assessment
 #'
-#' @format A data frame with 53940 rows and 18 variables:
+#' @format A data frame with 7644 rows and 18 variables:
 #' \describe{
 #'   \item{Institution.code..UKPRN.}{uni code}
 #'   \item{Institution.name}{university name}
