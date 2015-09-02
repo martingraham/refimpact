@@ -1,0 +1,29 @@
+Package: refimpact
+Title: REF Impact Analysis
+Version: 1.0
+Authors@R: "Martin Graham <m.graham@napier.ac.uk> [aut, cre]"
+Description: Analyses REF impact statements
+Depends:
+  R (>= 3.1.1)
+License: What license is it under?
+LazyData: true
+Imports:
+  tm,
+  stringr,
+  data.table,
+  SnowballC,
+  RWeka,
+  RCurl,
+  NLP,
+  parallel,
+  openNLP,
+  openNLPmodels.en,
+  qdap,
+  munsell,
+  topicmodels,
+  lda,
+  clue,
+  ggplot2,
+  LDAvis,
+  servr
+  
