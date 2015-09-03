@@ -1,0 +1,87 @@
+---
+title: "Ref 2014 Impact"
+author: "Martin Graham"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{REF 2014 Impact Analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+This package analyses a document collection of impact case studies and then runs various metrics to score these documents. This produces, amongst other things, a table of metric scores per REF entry that can then be explored with simple corr functions to find correlations.
+
+## What You Need
+
+You need a bunch of case study files and the filepath that points to the directory they're in.
+
+You can also supply various options that detect boilerplate in the documents, section cutoffs, and the amount of iterations that some metrics run for. These all have default values though.
+
+In the event you're running this on a different UOA to Business (19), you will need to supply the UOA number as well.
+
+Any settings you supply can be fed into the top level function fromTheTop as so:
+
+```r
+results <- fromTheTop (list(
+  dirName = *wherever your case studies reside*,
+  impactSettings = list(uoa=19, profile="Impact"),
+  topicIter = 100
+)
+```
+
+Within the returned results list:
+
+* metricTable will hold the metric results.
+* corpus holds the case studies as a tm corpus for further investigation
+* properCorpus holds the proper words found in the case studies as a tm corpus
+* sTopicModel holds the supervised topic model for the regular tm corpus
+* sProperTopicModel holds the supervised topic model for the proper words tm corpus
+
+Which types of proper word are extracted from the documents can be changed with the following flags:
+*people, places, orgs, money, date, percentage*, with places and orgs the current defaults. *keepSpaces* decides whether multi-word proper names are collapsed or not. Collapsing the space helps the topic models tell the difference between "WelshGovernment" and "WelshAssembly" as they operate on single words, whereas keeping the space would lose the difference.
+
+To be honest, money, date and percentage seem a bit flakey, but this is how you could search for proper names as well:
+
+```r
+results <- fromTheTop (list(
+  dirName = *wherever your case studies reside*,
+  impactSettings = list(uoa=19, profile="Impact"),
+  topicIter = 100,
+  people = TRUE
+)
+```
+
+The other overwritable defaults can be seen in this chunk of code, but most of them are fine as is:
+```r
+defaultSettings <- list (
+    dirName = "C:/Martin/Data/Impact/REF submission documents/Case Studies",
+    boilerPlateTerms = c(
+      "Page",
+      "Impact case study (REF3b)",
+      "Title of case study:",
+      "(indicative maximum 100 words)",
+      "(indicative maximum 500 words)",
+      "(indicative maximum of six references)",
+      "(indicative maximum 750 words)",
+      "(indicative maximum of 10 references)"
+    ),
+    sectionHeadings = c(
+      "Summary of the impact",
+      "Underpinning research",
+      "References to the research",
+      "Details of the impact",
+      "Sources to corroborate the impact|Sources to corroborate impact|References to corroborate the impact" 
+    ),
+    impactSettings = list(uoa=19, profile="Impact"),
+    helperFiles = list(buzzFile1=system.file("extdata", "buzz.txt", package="refimpact"), 
+                       buzzFile2=system.file("extdata", "busibuzz.txt", package="refimpact")
+                       ),
+    topicCount = 10,
+    topicIter = 10,
+    keepSpaces = FALSE,
+    places = TRUE,
+    orgs = TRUE
+  )
+```
+
+The whole process can take a while to run (sometimes an hour). The biggest determinants are the number of documents to crunch and the number of iterations as set in the *topicIter* field. It is not quick; go for a cup of tea.
