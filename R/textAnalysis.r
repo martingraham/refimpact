@@ -28,7 +28,9 @@ fromTheTop <- function (mySettings=list()) {
       "Sources to corroborate the impact|Sources to corroborate impact|References to corroborate the impact" 
     ),
     impactSettings = list(uoa=19, profile="Impact"),
-    helperFiles = list(buzzFile1="C:/Martin/Data/Impact/buzz.txt", buzzFile2="C:/Martin/Data/Impact/busibuzz.txt"),
+    helperFiles = list(buzzFile1=system.file("extdata", "buzz.txt", package="refimpact"), 
+                       buzzFile2=system.file("extdata", "busibuzz.txt", package="refimpact")
+                       ),
     topicCount = 10,
     topicIter = 10,
     keepSpaces = FALSE,
