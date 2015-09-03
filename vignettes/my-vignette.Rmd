@@ -76,6 +76,7 @@ defaultSettings <- list (
     helperFiles = list(buzzFile1=system.file("extdata", "buzz.txt", package="refimpact"), 
                        buzzFile2=system.file("extdata", "busibuzz.txt", package="refimpact")
                        ),
+    doProperCorpus = TRUE,
     topicCount = 10,
     topicIter = 10,
     keepSpaces = FALSE,
@@ -84,4 +85,15 @@ defaultSettings <- list (
   )
 ```
 
-The whole process can take a while to run (sometimes an hour). The biggest determinants are the number of documents to crunch and the number of iterations as set in the *topicIter* field. It is not quick; go for a cup of tea.
+The whole process can take a while to run (sometimes an hour). The biggest determinants are the number of documents to crunch, the parsing and identification of proper words, and the number of iterations of topic modelling as set in the *topicIter* field. It is not quick; go for a cup of tea.
+
+the doProperCorpus flag can be set to FALSE to skip the generation and topic modelling of proper words if you are not interested in these.
+
+```r
+results <- fromTheTop (list(
+  dirName = *wherever your case studies reside*,
+  impactSettings = list(uoa=19, profile="Impact"),
+  topicIter = 100,
+  doProperCorpus = FALSE
+)
+```

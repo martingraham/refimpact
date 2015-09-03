@@ -110,13 +110,21 @@ code > span.er { color: #ff0000; font-weight: bold; }
     <span class="dt">helperFiles =</span> <span class="kw">list</span>(<span class="dt">buzzFile1=</span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;buzz.txt&quot;</span>, <span class="dt">package=</span><span class="st">&quot;refimpact&quot;</span>), 
                        <span class="dt">buzzFile2=</span><span class="kw">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;busibuzz.txt&quot;</span>, <span class="dt">package=</span><span class="st">&quot;refimpact&quot;</span>)
                        ),
+    <span class="dt">doProperCorpus =</span> <span class="ot">TRUE</span>,
     <span class="dt">topicCount =</span> <span class="dv">10</span>,
     <span class="dt">topicIter =</span> <span class="dv">10</span>,
     <span class="dt">keepSpaces =</span> <span class="ot">FALSE</span>,
     <span class="dt">places =</span> <span class="ot">TRUE</span>,
     <span class="dt">orgs =</span> <span class="ot">TRUE</span>
   )</code></pre>
-<p>The whole process can take a while to run (sometimes an hour). The biggest determinants are the number of documents to crunch and the number of iterations as set in the <em>topicIter</em> field. It is not quick; go for a cup of tea.</p>
+<p>The whole process can take a while to run (sometimes an hour). The biggest determinants are the number of documents to crunch, the parsing and identification of proper words, and the number of iterations of topic modelling as set in the <em>topicIter</em> field. It is not quick; go for a cup of tea.</p>
+<p>the doProperCorpus flag can be set to FALSE to skip the generation and topic modelling of proper words if you are not interested in these.</p>
+<pre class="sourceCode r"><code class="sourceCode r">results &lt;-<span class="st"> </span><span class="kw">fromTheTop</span> (<span class="kw">list</span>(
+  <span class="dt">dirName =</span> *wherever your case studies reside*,
+  <span class="dt">impactSettings =</span> <span class="kw">list</span>(<span class="dt">uoa=</span><span class="dv">19</span>, <span class="dt">profile=</span><span class="st">&quot;Impact&quot;</span>),
+  <span class="dt">topicIter =</span> <span class="dv">100</span>,
+  <span class="dt">doProperCorpus =</span> <span class="ot">FALSE</span>
+)</code></pre>
 </div>
 
 

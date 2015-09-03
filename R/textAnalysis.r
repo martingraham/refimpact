@@ -31,6 +31,7 @@ fromTheTop <- function (mySettings=list()) {
     helperFiles = list(buzzFile1=system.file("extdata", "buzz.txt", package="refimpact"), 
                        buzzFile2=system.file("extdata", "busibuzz.txt", package="refimpact")
                        ),
+    doProperCorpus = TRUE,
     topicCount = 10,
     topicIter = 10,
     keepSpaces = FALSE,
@@ -42,7 +43,11 @@ fromTheTop <- function (mySettings=list()) {
   
   corpus <- loadDocs (mergedSettings$dirName)
   corpus <- primeCaseStudyDocs (corpus, mergedSettings)
-  pwordCorpus <- makeProperWordCorpus (corpus, mergedSettings)
+  if (doProperCorpus) {
+    pwordCorpus <- makeProperWordCorpus (corpus, mergedSettings)
+  } else {
+    pwordCorpus <- NULL
+  }
   results <- doMetrics (corpus, pwordCorpus, mergedSettings)
   
   write.csv (results$metricTable, "results.csv", row.names=FALSE, na="")
@@ -334,6 +339,9 @@ attachMetaToDocs <- function (docs, impScores) {
 #' }
 mergeByInstitution <- function (docs, metaProp="name") {
   library (tm)
+  if (is.null(docs)) {
+    return (docs)
+  }
   
   names <- sapply (docs, function(i) meta(i, metaProp))
   byName <- sapply (unique(names), function(n) which(names==n))
@@ -496,16 +504,18 @@ doMetrics <- function (docs, properCorpus, settings) {
   resultFrame$allWordTopicScore <- topicPredicted$predict
   printTopicWeightings (topicModel$stm)
   
-  properNameTopicModel <- superTopicModel (properCorpus, topicCount=settings$topiCount, sharedTopicSettings)
-  properTopicPredicted <- topicAccuracy (properCorpus, resultFrame$impact, list(alpha=1.0), topicCount=settings$topicCount, stm=properNameTopicModel$stm)
-  resultFrame$properWordTopicScore <- properTopicPredicted$predict
-  printTopicWeightings (properNameTopicModel$stm)
+  if (!is.null(properCorpus)) {
+    properNameTopicModel <- superTopicModel (properCorpus, topicCount=settings$topiCount, sharedTopicSettings)
+    properTopicPredicted <- topicAccuracy (properCorpus, resultFrame$impact, list(alpha=1.0), topicCount=settings$topicCount, stm=properNameTopicModel$stm)
+    resultFrame$properWordTopicScore <- properTopicPredicted$predict
+    printTopicWeightings (properNameTopicModel$stm)
+  }
   
   list(metricTable=resultFrame,
        corpus=docs,
        properCorpus=properCorpus,
        sTopicModel=topicModel$stm,
-       sProperTopicModel=properNameTopicModel$stm
+       sProperTopicModel=ifelse(is.null(properCorpus), NULL, properNameTopicModel$stm)
   )
 }
 
@@ -583,6 +593,10 @@ docProcessing <- function (docs, myStops = c(), stripNumbers=FALSE, stem=TRUE)
 {
   library(tm)
   library(SnowballC)
+  
+  if (is.null(docs)) {
+    return (docs)
+  }
   
   docs <- filterOutOwnName (docs)
   
