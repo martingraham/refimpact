@@ -3,11 +3,11 @@ Title: REF Impact Analysis
 Version: 1.0
 Authors@R: "Martin Graham <m.graham@napier.ac.uk> [aut, cre]"
 Description: Analyses REF impact statements
-Depends:
+Depends: 
   R (>= 3.1.1)
 License: What license is it under?
 LazyData: true
-Imports:
+Imports: 
   tm,
   stringr,
   data.table,
@@ -26,4 +26,5 @@ Imports:
   ggplot2,
   LDAvis,
   servr
-  
+Suggests: knitr
+VignetteBuilder: knitr
