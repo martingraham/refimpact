@@ -45,7 +45,7 @@ fromTheTop <- function (mySettings=list()) {
   pwordCorpus <- makeProperWordCorpus (corpus, mergedSettings)
   results <- doMetrics (corpus, pwordCorpus, mergedSettings)
   
-  write.csv (results, "results.csv", row.names=FALSE, na="")
+  write.csv (results$metricTable, "results.csv", row.names=FALSE, na="")
   
   results
 }
