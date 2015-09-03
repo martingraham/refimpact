@@ -6,6 +6,9 @@
 \usage{
 fromTheTop(mySettings = list())
 }
+\arguments{
+\item{mySettings,}{list of alternative boilerplate terms etc to overwrite defaults}
+}
 \value{
 list containing metric results, and document corpora along with supervised topic models
 }

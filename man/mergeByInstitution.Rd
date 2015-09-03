@@ -18,6 +18,8 @@ merged docs by uni name, with extra meta field docCount indicated number of docs
 Preserve content sectioning, copies over uni names and impact scores
 }
 \examples{
-mergeByInstitution (docs)
+\dontrun{
+mergeByInstitution (corpus)
+}
 }
 

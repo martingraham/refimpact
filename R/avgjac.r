@@ -196,6 +196,19 @@ drawStable <- function (data, start) {
   #dframe
 }
 
+#' Produce visualisation of LDA topic corpus using LDAvis package
+#'
+#' Takes in corpus and supervised topic model and produces interactive web page with topics marked on it
+#' @export
+#' @param corpus TM document corpus
+#' @param slda supervised LDA topic models
+#' @return alpha optional SLDA variable, 1.0 if docs contain diverse material which the merged ones do
+#' @return eta an even less explanatory optional SLDA variable, never found a plain words explanation for it yet. Best leave to default.
+#' @return dir the directory name in which to place generated web pages. optional, default is "vis"
+#' @examples
+#' \dontrun{
+#' makeLDAVisJSON (corpus, topicModel, dir="vis")
+#' }
 makeLDAVisJSON <- function (corpus, slda, alpha=1.0, eta=0.1, dir="vis") {
   library (LDAvis)
   library (servr)

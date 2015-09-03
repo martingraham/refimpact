@@ -3,6 +3,7 @@
 #' This function chews a load of pdfs in a fixed directory
 #' @keywords impact ref text
 #' @export
+#' @param mySettings, list of alternative boilerplate terms etc to overwrite defaults
 #' @return list containing metric results, and document corpora along with supervised topic models
 fromTheTop <- function (mySettings=list()) {
   library (RCurl)
@@ -56,7 +57,9 @@ fromTheTop <- function (mySettings=list()) {
 #' @param isRecursive flag whether sub-directories should be searched
 #' @return TM document corpus
 #' @examples
+#' \dontrun{
 #' loadDocs (dirName="C:/Martin/Data/Impact/REF submission documents/Templates", isRecursive=FALSE)
+#' }
 loadDocs <- function (dirName="C:/Martin/Data/Impact/REF submission documents/Case Studies", isRecursive=TRUE) {
   library(tm)
   library(stringr)
@@ -208,7 +211,7 @@ sectionise <- function (docs, sectionHeadings=c("")) {
 #' @param settings, list containing uoa : the unit of assessment, profile: the profile type to score
 #' @return a data.table of scores per university
 #' @examples
-#' impactScoreReader (uoa=19, profile="Impact")
+#' impactScoreReader (list(uoa=19, profile="Impact"))
 impactScoreReader <- function (settings) {
   library (data.table)
   
@@ -324,7 +327,9 @@ attachMetaToDocs <- function (docs, impScores) {
 #' @param field in document meta information to merge on. Default is name.
 #' @return merged docs by uni name, with extra meta field docCount indicated number of docs merged per institution
 #' @examples
-#' mergeByInstitution (docs)
+#' \dontrun{
+#' mergeByInstitution (corpus)
+#' }
 mergeByInstitution <- function (docs, metaProp="name") {
   library (tm)
   
@@ -415,8 +420,6 @@ buzzCount <- function (docs, cname) {
   bzf <- data.frame(single=countPerDoc1, double=countPerDoc2)
   bzf$total <- bzf$single + bzf$double
   
-  # example plot of data
-  #drawWeightGPAPlot (docs, "impact", unlist(bzf$total), "#444444", xlab="Buzzword Count")
   #bcorr <- calcCorrelation (docs, "impact", unlist(bzf$total), method="pearson")
   bzf
 }
@@ -434,7 +437,9 @@ vectorMeta <- function (docs, property) {
 #' @param settings list, must include helperFiles$buzzFile1, helperFiles$buzzFile2 - links to buzzword lists, and topicCount, topicIter - values for supervised topic modelling
 #' @return list containing metric results, and document corpora along with supervised topic models
 #' @examples
-#' doMetrics (corpus, properCorpus, list(helperFiles=list(buzzFile1="C:/Martin/Data/Impact/buzz.txt", buzzFile2="C:/Martin/Data/Impact/busibuzz.txt")), topicCount=10, topicIter=30))
+#' \dontrun{
+#' doMetrics (corpus, properCorpus, list(helperFiles=list(buzzFile1="C:/Martin/Data/Impact/buzz.txt", buzzFile2="C:/Martin/Data/Impact/busibuzz.txt"), topicCount=10, topicIter=30))
+#' }
 doMetrics <- function (docs, properCorpus, settings) {
   library(stringr)
   library(tm)
@@ -503,15 +508,11 @@ doMetrics <- function (docs, properCorpus, settings) {
 }
 
 plots <- function (docs, metricTable) {
-  
-  # make a colour scale based on docs impact scores
-  tcol <- makeColourScale (docs)
-  
-  drawWeightGPAPlot (docs, "impact", metricTable$readability, "#444444", xlab="Flesch-Kincaid Ease of Readability")
-  drawWeightGPAPlot (docs, "impact", metricTable$firstYear, "#444444", xlab="First Year Mentioned")
-  results <- drawPlots (docs, tcol)
-  drawWeightGPAPlot (docs, "impact", metricTable$allWordTopicScore, "#444444", xlab="Topic Index")
-  drawWeightGPAPlot (docs, "impact", metricTable$allWordTopicScore, "#444444", xlab="Topic Index")
+  drawWeightGPAPlot (metricTable$impact, metricTable$readability, "#444444", xlab="Flesch-Kincaid Ease of Readability")
+  drawWeightGPAPlot (metricTable$impact, metricTable$firstYear, "#444444", xlab="First Year Mentioned")
+  drawWeightGPAPlot (metricTable$impact, metricTable$allWordTopicScore, "#444444", xlab="SLDA Topic Score")
+  drawWeightGPAPlot (metricTable$impact, metricTable$properWordTopicScore, "#444444", xlab="SLDA Proper Word Topic Score")
+  results <- drawPlots (docs, metricTable$impact)
 }
 
 
@@ -532,8 +533,6 @@ topicModelPlot <- function (docs, topicCount=NULL) {
     v <- tindices[i]
     which(coorder==v)
   })
-  
-  #drawWeightGPAPlot (docs, "impact", sorttindices, tcol)
   
   topicModel
 }
@@ -747,11 +746,14 @@ makeProperWordCorpusFromList <- function (originalCorpus, properNameList, keepSp
 #' Produce corpus of proper names from original corpus
 #'
 #' Takes in corpus and flags to decide which entity types to parse for
+#' @export
 #' @param originalCorpus TM document corpus
 #' @param settings list of boolean flags to control what is parsed (people, places, orgs, date). keepSpaces decides concatenation of multi-word terms.
 #' @return TM document corpus containing just proper names
 #' @examples
+#' \dontrun{
 #' makeProperWordCorpus (corpus, list(keepSpaces=TRUE, people=TRUE, places=TRUE))
+#' }
 makeProperWordCorpus <- function (originalCorpus, settings) {
   originalCorpus <- filterOutOwnName (originalCorpus)
   properNameList <- properNameExtraction (originalCorpus, settings)
@@ -948,12 +950,15 @@ makeColourScale <- function (docs) {
 }
 
 
-drawPlots <- function (docs, tcol, invMatrix=NA)
+drawPlots <- function (docs, impactScores, invMatrix=NA)
 {
   if (is.na(invMatrix)) {
     matrices <- makeTermMatrices (docs, c(5, nrow(docs) * 0.8))
     invMatrix <- matrices$inverse
   }
+  
+  # make a colour scale based on docs impact scores
+  tcol <- makeColourScale (docs)
   
   m <- as.matrix (invMatrix)
   rownames(m) <- 1:nrow(m)
@@ -972,13 +977,13 @@ drawPlots <- function (docs, tcol, invMatrix=NA)
   terms <- c("ceo", "director", "msp", "minister", "president", "councillor")
   tws <- c(4, 2, 2, 5, 7, 0.5)
   wordScores <- metricCalcWeightedScore (docs, terms, tws)
-  drawWeightGPAPlot (docs, "impact", unlist(wordScores), "#444444", xlab="Good word count")
+  drawWeightGPAPlot (impactScores, unlist(wordScores), "#444444", xlab="Good word count")
   
   
   #terms <- c("letter", "direct", "director", "committee", "ceo", "government", "govern", "speech", "polici", "common", "department")
   #tws <- c(5, 3, 3, 3, 3, 5, 5, 2, 3, 4, 1)
   #wordScores <- metricCalcWeightedScore (docs, terms, tws)
-  #drawWeightGPAPlot (docs, "impact", unlist(wordScores), "#444444", xlab="Good word count")
+  #drawWeightGPAPlot (impactScores, unlist(wordScores), "#444444", xlab="Good word count")
   
   wordScores
 }
@@ -1028,11 +1033,22 @@ metricCalcWeightedScore <- function (docs, terms, weights) {
   wscores
 }
 
-
-drawWeightGPAPlot <- function (docs, docField, weightScores, colScale, xlab="WEIGHT", ylab="IMPACT GPA") {
+#' Draw scatterplot of one variable against impact scores
+#
+#' Draw a scatterplot of a given variable vector against a vector of impact scores to eyeball for patterns
+#' @export
+#' @param impactScores vector of doubles, impact score per institution/entry
+#' @param weightScores a vector of doubles to pair off and compare with the impact scores
+#' @param colScale colour scale for plot or a set value 
+#' @param xlab X axis label
+#' @param ylab Y axis label
+#' @return the plot object (i think)
+#' @examples
+#' drawWeightGPAPlot (c(1.0, 1.1, 1.2), c(2.0, 2.4, 3.0), "#444444")
+drawWeightGPAPlot <- function (impactScores, weightScores, colScale, xlab="WEIGHT", ylab="IMPACT GPA") {
   library (tm)
   x <- weightScores
-  y <- sapply (docs, function(doc) meta (doc, docField))
+  y <- impactScores
   fixr <- (diff(range(weightScores)) + 0.01) / 200; # resolution of 200
   symbols(x, y, circles = rep (fixr, length(x)), inches = FALSE, main="Var by Impact", xlab=xlab, ylab=ylab, bg=colScale, fg="white")
   #text(x, y, labels = c(1:length(docs)), pos = 2, cex=.7, col = "#44444480")

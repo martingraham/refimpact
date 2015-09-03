@@ -20,6 +20,8 @@ list containing metric results, and document corpora along with supervised topic
 Run readability, length, topic model metrics on documents
 }
 \examples{
-doMetrics (corpus, properCorpus, list(helperFiles=list(buzzFile1="C:/Martin/Data/Impact/buzz.txt", buzzFile2="C:/Martin/Data/Impact/busibuzz.txt")), topicCount=10, topicIter=30))
+\dontrun{
+doMetrics (corpus, properCorpus, list(helperFiles=list(buzzFile1="C:/Martin/Data/Impact/buzz.txt", buzzFile2="C:/Martin/Data/Impact/busibuzz.txt"), topicCount=10, topicIter=30))
+}
 }
 

@@ -16,6 +16,6 @@ a data.table of scores per university
 This function extracts scores from the ref2014 data set given a uoa and profile type
 }
 \examples{
-impactScoreReader (uoa=19, profile="Impact")
+impactScoreReader (list(uoa=19, profile="Impact"))
 }
 

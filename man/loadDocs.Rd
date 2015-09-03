@@ -20,6 +20,8 @@ TM document corpus
 This function chews a load of pdfs in a given directory
 }
 \examples{
+\dontrun{
 loadDocs (dirName="C:/Martin/Data/Impact/REF submission documents/Templates", isRecursive=FALSE)
+}
 }
 

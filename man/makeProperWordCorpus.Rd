@@ -18,6 +18,8 @@ TM document corpus containing just proper names
 Takes in corpus and flags to decide which entity types to parse for
 }
 \examples{
+\dontrun{
 makeProperWordCorpus (corpus, list(keepSpaces=TRUE, people=TRUE, places=TRUE))
+}
 }
 
