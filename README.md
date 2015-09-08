@@ -1,21 +1,24 @@
-Install with R commands
+Install the package with these R commands:
 
-install.packages("devtools")
-devtools::install_github("martingraham/refimpact")
+`install.packages("devtools")`
+`devtools::install_github("martingraham/refimpact")`
 
 
-dependency openNLPmodels.en not available on CRAN, install similarly with R command
-
-install.packages("openNLPmodels.en", repos = "http://datacube.wu.ac.at/", type = "source")
-
+The dependency openNLPmodels.en not available on CRAN, install similarly with R command
+`install.packages("openNLPmodels.en", repos = "http://datacube.wu.ac.at/", type = "source")`
 See http://datacube.wu.ac.at
 
+If you are trying to import pdfs myou will need to install the separate xpdf software from here:
+http://www.foolabs.com/xpdf/home.html
+and then add the xpdf.exe to your computer's PATH variable so R can call it. If you're using text docs you're fine.
 
-Settings needed to change default locations of reference files etc so it works (which it won't unless you're on my computer)
+
+The location of the case study files needs to be stated. The example below shows all the values that can be changed and passed into the R package, but the dirName='WhereYourCaseStudiesAre' is the only one that needs to be set for certain.
 
 here's an example:
-defaultSettings <- list (
-    dirName = "C:/Martin/Data/Impact/REF submission documents/Case Studies",
+```
+mySettings <- list (
+    dirName = "C:/*YourDir*/Case Studies",
     boilerPlateTerms = c(
       "Page",
       "Impact case study (REF3b)",
@@ -33,16 +36,18 @@ defaultSettings <- list (
       "Details of the impact",
       "Sources to corroborate the impact|Sources to corroborate impact|References to corroborate the impact" 
     ),
-    impactSettings = list(cname="C:/Martin/Data/Impact/REF2014-Results-xlsx.csv", uoa=19, profile="Impact"),
-    helperFiles = list(buzzFile1="C:/Martin/Data/Impact/buzz.txt", buzzFile2="C:/Martin/Data/Impact/busibuzz.txt"),
+    impactSettings = list(uoa=19, profile="Impact"),
+    helperFiles = list(buzzFile1="C:/*YourDir*/buzz.txt", buzzFile2="C:/*YourDir*/busibuzz.txt"),
+    doProperCorpus = TRUE,
     topicCount = 10,
     topicIter = 60,
     keepSpaces = FALSE,
     places = TRUE,
-    orgs = TRUE
+    orgs = TRUE,
+    people = FALSE
   )
-
+```
 then run
 
-fromTheTop(mySettings=defaultSettings)
+`fromTheTop (mySettings)`
 
