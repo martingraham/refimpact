@@ -1,3 +1,5 @@
+A package to process Impact Case Study files and measure metrics to compare to the awarded impact score for each institution.
+
 Install the package with these R commands:
 ```
 install.packages("devtools")
