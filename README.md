@@ -5,8 +5,10 @@ devtools::install_github("martingraham/refimpact")
 ```
 
 
-The dependency openNLPmodels.en not available on CRAN, install similarly with R command
-`install.packages("openNLPmodels.en", repos = "http://datacube.wu.ac.at/", type = "source")`
+The dependency openNLPmodels.en not available on CRAN, install this with:
+```
+install.packages("openNLPmodels.en", repos = "http://datacube.wu.ac.at/", type = "source")
+```
 See http://datacube.wu.ac.at
 
 If you are trying to import pdfs myou will need to install the separate xpdf software from here:
