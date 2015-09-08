@@ -1,7 +1,8 @@
 Install the package with these R commands:
-
-`install.packages("devtools")`
-`devtools::install_github("martingraham/refimpact")`
+```
+install.packages("devtools")
+devtools::install_github("martingraham/refimpact")
+```
 
 
 The dependency openNLPmodels.en not available on CRAN, install similarly with R command
